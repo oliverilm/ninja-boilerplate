@@ -2,6 +2,8 @@
 
 
 cd ./backend
+# TODO: command to init venv and install deps
+
 case $1 in
     help)
         echo "Commands that can be run:"
