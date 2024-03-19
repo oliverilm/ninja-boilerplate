@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  database:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+
+  api:
+    build :
+      context: ../
+      dockerfile: Dockerfile.local
+    ports : 
+      - "8000:8000"
+    volumes : 
+      - ../:/src
+    depends_on:
+      - database
+  
+volumes:
+  database:
+

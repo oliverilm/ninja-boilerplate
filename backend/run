@@ -1,0 +1,33 @@
+#!/bin/bash
+
+
+cd ./backend
+case $1 in
+    help)
+        echo "Commands that can be run:"
+        echo "  ./run start local             Start local dev server in a docker container"
+        echo "  ./run start prod              Start prod server in a docker container"
+        echo ""
+        echo "  ./run db makemigrations       Generate database migrations"
+        echo "  ./run db migrate              Apply database migrations"
+
+        exit
+    ;;
+    install)
+        source venv/bin/activate
+        pip freeze > requirements.txt
+        pip install -r requirements.txt
+        exit
+    ;;
+    test)
+        python manage.py test
+        exit
+    ;;
+    *)
+        chmod +x ./scripts/$1
+        ./scripts/$1 $2
+        exit
+    ;;
+esac
+
+        
