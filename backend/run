@@ -15,14 +15,28 @@ case $1 in
 
         exit
     ;;
+    start)
+        source venv/bin/activate
+        cd api
+        python3 manage.py runserver
+    ;;
+    start:docker)
+        # TODO
+        exit
+    ;;
+    start:docker:prod)
+        # TODO
+        exit
+    ;;
     install)
         source venv/bin/activate
-        pip freeze > requirements.txt
         pip install -r requirements.txt
         exit
     ;;
     test)
-        python manage.py test
+        source venv/bin/activate
+        cd api
+        python3 manage.py test
         exit
     ;;
     *)

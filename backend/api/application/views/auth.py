@@ -2,13 +2,14 @@ from application.models.user import AppUser
 from application.schemas.user import UserIn, UserOut
 from django.contrib.auth import get_user_model
 from ninja import Router
+from django.db.utils import IntegrityError
 from ninja_crud.views import (
     DeleteModelView,
     ListModelView,
     RetrieveModelView,
     UpdateModelView,
 )
-
+from application.utils.error import UserAlreadyExistsError, GenericError
 from ninja_crud.viewsets import ModelViewSet
 
 no_auth_router = Router()
@@ -16,12 +17,18 @@ no_auth_router = Router()
 
 @no_auth_router.post("/", response=UserOut)
 def register_user(request, user_in: UserIn):
-    print(user_in)
-    user = get_user_model().objects.create_user(
-        username=user_in.email, email=user_in.email, password=user_in.password
-    )
-    return user
-
+    try:
+        return get_user_model().objects.create_user(
+            username=user_in.email, 
+            email=user_in.email, 
+            password=user_in.password
+        )
+    
+    except IntegrityError as error:
+        raise UserAlreadyExistsError(error)
+   
+    
+    
 
 auth_router = Router()
 

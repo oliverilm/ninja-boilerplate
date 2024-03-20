@@ -1,4 +1,11 @@
 from ninja import Swagger
+# from api.views import item_router, user_auth_router, user_no_auth_router
+from application.views import auth_router, no_auth_router
+from ninja.errors import ValidationError as NinjaValidationError
+from ninja_extra import NinjaExtraAPI
+from ninja_jwt.authentication import JWTAuth
+from ninja_jwt.controller import NinjaJWTDefaultController
+
 from http import HTTPStatus
 from application.utils.error import ApiError
 
@@ -9,11 +16,8 @@ from django.core.exceptions import (
     PermissionDenied,
     ValidationError,
 )
-from application.views import auth_router, no_auth_router
 from ninja.errors import ValidationError as NinjaValidationError
-from ninja_extra import NinjaExtraAPI
-from ninja_jwt.authentication import JWTAuth
-from ninja_jwt.controller import NinjaJWTDefaultController
+from .utils.error import GenericError, UserAlreadyExistsError
 
 
 api = NinjaExtraAPI(docs=Swagger())
@@ -24,6 +28,7 @@ api.add_router("/users", no_auth_router, tags=["users"])
 api.add_router("/users", auth_router, auth=JWTAuth(), tags=["users"])
 
 
+# TODO: move those handlers out of here
 @api.exception_handler(ObjectDoesNotExist)
 def handle_object_does_not_exist(request, exc):
     return api.create_response(
@@ -76,3 +81,21 @@ def handle_field_error(request, exc: FieldError):
         data={"message": ApiError.FieldError, "detail": str(exc)},
         status=HTTPStatus.BAD_REQUEST,
     )
+
+@api.exception_handler(UserAlreadyExistsError)
+def handle_unique_user_error(request, exc: UserAlreadyExistsError):
+    return api.create_response(
+        request,
+        data={"message": ApiError.UserAlreadyExistsError, "detail": str(exc)},
+        status=HTTPStatus.BAD_REQUEST,
+    )
+
+@api.exception_handler(GenericError)
+def handle_generic_error(request, exc: GenericError):
+    return api.create_response(
+        request,
+        data={"message": "GenericError", "detail": str(exc)},
+        status=HTTPStatus.BAD_REQUEST,
+    )
+
+

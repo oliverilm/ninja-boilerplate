@@ -1,1 +1,1 @@
-from .api_tests import *
+from .views.auth import *
