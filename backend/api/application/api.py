@@ -20,7 +20,7 @@ from ninja.errors import ValidationError as NinjaValidationError
 from .utils.error import GenericError, UserAlreadyExistsError
 
 
-api = NinjaExtraAPI(docs=Swagger())
+api = NinjaExtraAPI(docs=Swagger(), version="v1")
 api.register_controllers(NinjaJWTDefaultController)
 
 

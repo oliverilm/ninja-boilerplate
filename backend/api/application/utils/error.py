@@ -1,3 +1,12 @@
+from django.core.exceptions import (
+    FieldError,
+    ObjectDoesNotExist,
+    PermissionDenied,
+    ValidationError,
+)
+from ninja.errors import ValidationError as NinjaValidationError
+
+
 class ApiError:
     ObjectDoesNotExiste="ObjectDoesNotExist"
     PermissionDenied="PermissionDenied"
