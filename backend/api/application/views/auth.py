@@ -23,7 +23,6 @@ def register_user(request, user_in: UserIn):
             email=user_in.email, 
             password=user_in.password
         )
-    
     except IntegrityError as error:
         raise UserAlreadyExistsError(error)
    

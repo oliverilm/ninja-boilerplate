@@ -86,15 +86,15 @@ def handle_field_error(request, exc: FieldError):
 def handle_unique_user_error(request, exc: UserAlreadyExistsError):
     return api.create_response(
         request,
-        data={"message": ApiError.UserAlreadyExistsError, "detail": str(exc)},
+        data={"message": UserAlreadyExistsError.message, "detail": "AAA"},
         status=HTTPStatus.BAD_REQUEST,
     )
 
-@api.exception_handler(GenericError)
-def handle_generic_error(request, exc: GenericError):
+@api.exception_handler(AssertionError)
+def handle_generic_error(request, exc: AssertionError):
     return api.create_response(
         request,
-        data={"message": "GenericError", "detail": str(exc)},
+        data={"message": GenericError.message, "detail": "AAAAAAAAA"},
         status=HTTPStatus.BAD_REQUEST,
     )
 
