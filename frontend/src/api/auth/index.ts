@@ -1,14 +1,12 @@
 import axios from "axios";
 
-
-
 const authInstance = axios.create({ baseURL: "" })
 
 export function signUp(data: unknown) {
     return authInstance.post(``, data)
 }
 
-export function login(data: unknown) {
+export function authenticate(data: unknown) {
     return authInstance.post(``, data)
 }
 
