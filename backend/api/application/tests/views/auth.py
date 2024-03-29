@@ -10,14 +10,15 @@ test_user = {
 
 class AuthenticationTests(TestCase):
     def test_user_create_success(self):
-        pass
         client = TestClient(no_auth_router)
+
         response = client.post("/", json=test_user)
         self.assertEqual(response.status_code, 200)
 
     
     def test_user_unique_constraint(self):
         client = TestClient(no_auth_router)
+
         client.post("/", json=test_user)
 
         response = client.post("/", json=test_user)
@@ -26,10 +27,12 @@ class AuthenticationTests(TestCase):
 
     def test_user_field_error(self):
         client = TestClient(no_auth_router)
-        response = client.post("/", json={"email": test_user.get("email")})
+
+        response = client.post("/", json={"email": test_user["email"]})
 
         self.assertEqual(response.status_code, GenericError.status_code)
         self.assertEqual(response.json()["detail"], [{'type': 'missing', 'loc': ['body', 'user_in', 'password'], 'msg': 'Field required'}])
+
 
     def test_obtain_token(self):
         pass
