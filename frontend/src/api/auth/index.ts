@@ -10,6 +10,14 @@ export function authenticate(data: unknown) {
     return authInstance.post(``, data)
 }
 
+export function verifyToken(data: unknown) {
+    return authInstance.post(``, data)
+}
+
+export function refreshToken(data: unknown) {
+    return authInstance.post(``, data)
+}
+
 export function getProfile() {
     return authInstance.get("")
 }
