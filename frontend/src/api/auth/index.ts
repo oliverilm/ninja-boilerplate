@@ -26,6 +26,7 @@ export function signUp(data: RegisterData): Promise<AxiosResponse<RegisterRespon
     return axios.post(`http://0.0.0.0:8765/api/users/`, data)
 }
 
+// -------------------------------------
 export type AuthenticateData = {
     password: string;
     username: string;
@@ -39,6 +40,7 @@ export function authenticate(data: AuthenticateData): Promise<AxiosResponse<Toke
     return authInstance.post(`token/pair`, data)
 }
 
+// -------------------------------------
 export type VerifyData = {
     token: string;
 }
@@ -46,6 +48,7 @@ export function verifyToken(data: VerifyData) {
     return authInstance.post(`token/verify`, data)
 }
 
+// -------------------------------------
 export type RefreshData = {
     refresh: string;
 }
@@ -53,8 +56,9 @@ export function refreshToken(data: RefreshData): Promise<AxiosResponse<TokensRes
     return authInstance.post(`token/refresh`, data)
 }
 
+// -------------------------------------
 export function getProfile() {
-    return authInstance.get("")
+    return authInstance.get("users/me")
 }
 
 
