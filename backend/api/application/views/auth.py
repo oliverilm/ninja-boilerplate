@@ -17,6 +17,10 @@ no_auth_router = Router()
 
 @no_auth_router.post("/", response=UserOut)
 def register_user(request, user_in: UserIn):
+    print("AAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAA")
+    print("AAAAAAAAAAAAAAAAAAAAAA")
     try:
         return get_user_model().objects.create_user(
             username=user_in.email, 

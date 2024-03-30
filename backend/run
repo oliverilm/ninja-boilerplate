@@ -18,7 +18,8 @@ case $1 in
     start)
         source venv/bin/activate
         cd api
-        python3 manage.py runserver
+        python3 manage.py runserver 0.0.0.0:8765
+        exit
     ;;
     start:docker)
         # TODO

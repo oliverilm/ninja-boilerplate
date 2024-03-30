@@ -24,8 +24,8 @@ api = NinjaExtraAPI(docs=Swagger(), version="v1")
 api.register_controllers(NinjaJWTDefaultController)
 
 
-api.add_router("/users", no_auth_router, tags=["users"])
-api.add_router("/users", auth_router, auth=JWTAuth(), tags=["users"])
+api.add_router("users", no_auth_router, tags=["users"])
+api.add_router("users", auth_router, auth=JWTAuth(), tags=["users"])
 
 
 # TODO: move those handlers out of here
