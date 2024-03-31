@@ -9,6 +9,8 @@ from ninja_crud.views import (
     RetrieveModelView,
     UpdateModelView,
 )
+from ninja_jwt.authentication import JWTAuth
+
 from application.utils.error import UserAlreadyExistsError, GenericError
 from ninja_crud.viewsets import ModelViewSet
 
@@ -17,10 +19,6 @@ no_auth_router = Router()
 
 @no_auth_router.post("/", response=UserOut)
 def register_user(request, user_in: UserIn):
-    print("AAAAAAAAAAAAAAAAAAAAAA")
-    print("AAAAAAAAAAAAAAAAAAAAAA")
-    print("AAAAAAAAAAAAAAAAAAAAAA")
-    print("AAAAAAAAAAAAAAAAAAAAAA")
     try:
         return get_user_model().objects.create_user(
             username=user_in.email, 
@@ -30,8 +28,6 @@ def register_user(request, user_in: UserIn):
     except IntegrityError as error:
         raise UserAlreadyExistsError(error)
    
-    
-    
 
 auth_router = Router()
 
@@ -52,7 +48,7 @@ class UserViewSet(ModelViewSet):
 UserViewSet.register_routes(auth_router)
 
 
-@auth_router.get("/me")
+@no_auth_router.get("/me", auth=JWTAuth(), response=UserOut)
 def get_current_user(request):
     """
     Get the current authenticated user.
@@ -60,6 +56,6 @@ def get_current_user(request):
     user = request.user
 
     if user.is_authenticated:
-        return UserOut(id=user.id, username=user.username, email=user.email)
+        return user
     else:
         return {"detail": "Authentication credentials were not provided."}

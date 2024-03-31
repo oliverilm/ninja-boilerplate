@@ -1,13 +1,13 @@
 from ninja import Schema
 from ninja import ModelSchema
-from django.contrib.auth.models import User
+from application.models.user import AppUser
 
 class UserOut(ModelSchema):
     class Meta:
-        model = User
+        model = AppUser
         exclude = ["password",]
 
 class UserIn(ModelSchema):
     class Meta:
-        model = User
+        model = AppUser
         fields = ["email", "password"]

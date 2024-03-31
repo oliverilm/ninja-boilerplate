@@ -4,11 +4,13 @@ const authInstance = axios.create({ baseURL: "http://0.0.0.0:8765/api/", headers
     "Content-Type": "application/json"
 } })
 
+// -------------------------------------
 export type RegisterData = {
     email: string;
     password: string;
 }
-export interface RegisterResponse {
+
+export interface Profile {
     id: number
     last_login: string
     is_superuser: boolean
@@ -19,10 +21,11 @@ export interface RegisterResponse {
     is_staff: boolean
     is_active: boolean
     date_joined: string
-    groups: unknown[]
-    user_permissions: unknown[]
-  }
-export function signUp(data: RegisterData): Promise<AxiosResponse<RegisterResponse>> {
+    groups: number[]
+    user_permissions: number[]
+}
+
+export function signUp(data: RegisterData): Promise<AxiosResponse<Profile>> {
     return axios.post(`http://0.0.0.0:8765/api/users/`, data)
 }
 
@@ -57,8 +60,13 @@ export function refreshToken(data: RefreshData): Promise<AxiosResponse<TokensRes
 }
 
 // -------------------------------------
-export function getProfile() {
-    return authInstance.get("users/me")
+
+
+export function getProfile(): Promise<AxiosResponse<Profile>> {
+    return authInstance.get("users/me", {headers: {
+        "Authorization": "Bearer " + localStorage.getItem("access")
+    }})
 }
 
+// -------------------------------------
 

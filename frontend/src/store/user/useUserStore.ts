@@ -1,22 +1,26 @@
 import { create } from "zustand";
-import { TokensResponse } from "../../api/auth";
+import { Profile, TokensResponse } from "../../api/auth";
 
 interface UserStoreBase {
     isAuthenticated: boolean,
     access: string | null,
     refresh: string | null,
+    user: Profile | null
 }
 
 const initialState: UserStoreBase = {
     isAuthenticated: false,
     access: null,
     refresh: null,
+    user: null,
 }
 
 export const useUserStore = create<{
     parseTokens: (value: TokensResponse) => void;
     setIsAuthenticated: (value: boolean) => void;
     logout: () => void;
+    setUserData: (value: Profile) => void;
+    setData: (value: Partial<UserStoreBase>) => void;
 } & UserStoreBase >((set) => ({
     ...initialState,
     logout: () => set(state => {
@@ -41,5 +45,7 @@ export const useUserStore = create<{
         }
         return state
     }),
-    setIsAuthenticated: (value: boolean) => set((state) => ({...state, isAuthenticated: value })),
+    setUserData: (value) => set((state) => ({...state, user: value})),
+    setIsAuthenticated: (value) => set((state) => ({...state, isAuthenticated: value })),
+    setData: (value) => set((state) => ({...state, ...value}))
   }))

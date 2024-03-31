@@ -1,18 +1,13 @@
 import { useLayoutEffect } from "react"
-import { useUserStore } from "../../store"
-import { refreshToken } from "../../api/auth"
+import { useAuth } from "../../hooks/useAuth/useAuth"
 
 export function AuthSystem() {
-    const {parseTokens} = useUserStore()
+    const {initialLoad} = useAuth()
+    
 
     useLayoutEffect(() => {
-        const refresh = localStorage.getItem("refresh")
-        if (refresh) {
-            refreshToken({ refresh }).then(response => {
-                parseTokens(response.data)
-            })
-        }
-    }, [parseTokens])
+        initialLoad()
+    }, [])
 
     return null
 }

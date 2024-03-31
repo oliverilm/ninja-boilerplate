@@ -1,8 +1,7 @@
 import { Button, Modal, TextInput, Text } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import useForm from "../../hooks/useForm";
-import { useUserStore } from "../../store";
-import { authenticate } from "../../api/auth";
+import { useAuth } from "../../hooks/useAuth/useAuth";
 
 interface LoginModalProps {
     opened: boolean,
@@ -12,7 +11,7 @@ interface LoginModalProps {
 
 export function LoginModal({ opened, onClose, noAccountCallback}: LoginModalProps) {
     const isMobile = useMediaQuery('(max-width: 50em)');
-    const {parseTokens} = useUserStore()
+    const {logIn } = useAuth()
     const form = useForm({
         initialValues: {
             username: "",
@@ -25,12 +24,8 @@ export function LoginModal({ opened, onClose, noAccountCallback}: LoginModalProp
     })
 
     const onSubmit = async (formValues: typeof form["values"]) => {
-        const tokens = await authenticate(formValues)
-        if (tokens) {
-            parseTokens(tokens.data)
-            // TODO: if error, parse this aswell
-            onClose()
-        }
+        logIn(formValues)
+        onClose()
     }
     return (
         <Modal opened={opened} onClose={onClose} title="Authentication" centered
