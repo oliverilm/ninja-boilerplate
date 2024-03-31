@@ -32,5 +32,18 @@ import type {
         if (than >= value) return customError ?? `Value must be greater than ${than}`;
         return;
       },
+    password: (value: FormInputAllowedValueType): FormInputValidatorResult => {
+      const min_length = 6
+      if (String(value).length < min_length) {
+        return "Password must be at least 6 characters long."
+      }
+    },
+    email: (value: FormInputAllowedValueType): FormInputValidatorResult => {
+      const emailPattern = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g
+
+      if (!String(value).match(emailPattern)) {
+        return "Not a valid email address."
+      }
+    }
   };
   

@@ -19,13 +19,17 @@ export function SignupModal({ opened, onClose, haveAccountCallback}: LoginModalP
             passwordConfirm: "",
         },
         validate: {
-            email: useForm.validators.skip,
-            password: useForm.validators.skip,
-            passwordConfirm: useForm.validators.skip
+            email: useForm.validators.email,
+            password: useForm.validators.password,
+            passwordConfirm: useForm.validators.password
         }
     })
 
-    const onSubmit = async ({email, password}: typeof form["values"]) => {
+    const onSubmit = async ({email, password, passwordConfirm}: typeof form["values"]) => {
+        if (password !== passwordConfirm) {
+            form.setFormInputErrors({ passwordConfirm: "Passwords do not match"})
+            return;
+        }
         signUp({email, password})
         onClose()
     }
