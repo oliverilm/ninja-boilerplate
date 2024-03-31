@@ -40,9 +40,9 @@ export function SignupModal({ opened, onClose, haveAccountCallback}: LoginModalP
           >
                 <form onSubmit={form.onSubmit(onSubmit)}>
                     {/* Modal content */}
-                    <TextInput {...form.getInputProps("email")} label="Email" />
-                    <TextInput {...form.getInputProps("password")} label="Password" type="password" />
-                    <TextInput {...form.getInputProps("passwordConfirm")} label="Password again" type="password" />
+                    <TextInput autoComplete="email" {...form.getInputProps("email")} label="Email" />
+                    <TextInput autoComplete="new-password" {...form.getInputProps("password")} label="Password" type="password" />
+                    <TextInput autoComplete="confirm-password" {...form.getInputProps("passwordConfirm")} label="Password again" type="password" />
 
                     <Button type="submit" mt="lg" w={"100%"}>Submit</Button>
 

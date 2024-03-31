@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import { LoginModal } from '../../utils/modal/LoginModal';
 import { SignupModal } from '../../utils/modal/SignupModal';
 import { useUserStore } from '../../store';
+import { useThemeStore } from '../../store/theme/useThemeStore';
 
 export function RootLayout() {
     const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
@@ -13,6 +14,8 @@ export function RootLayout() {
     const [signupModalOpened, { toggle: toggleSignup }] = useDisclosure(false);
 
     const {isAuthenticated, logout} = useUserStore()
+
+    const { toggleTheme, theme } = useThemeStore()
 
     return (
         <AppShell
@@ -50,6 +53,7 @@ export function RootLayout() {
             .map((_, index) => (
               <Skeleton key={index} h={28} mt="sm" animate={false} />
             ))}
+            <Button onClick={toggleTheme}>toggle {theme === "light" ? "dark" : "light"} theme</Button>
         </AppShell.Navbar>
         <AppShell.Main>
             <LoginModal 

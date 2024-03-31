@@ -33,8 +33,8 @@ export function LoginModal({ opened, onClose, noAccountCallback}: LoginModalProp
             transitionProps={{ transition: 'slide-up', duration: 200 }}
           >
                 <form onSubmit={form.onSubmit(onSubmit)}>
-                    <TextInput {...form.getInputProps("username")} label="Email" />
-                    <TextInput {...form.getInputProps("password")}label="Password" type="password" />
+                    <TextInput autoComplete="email" {...form.getInputProps("username")} label="Email" />
+                    <TextInput autoComplete="new-password" {...form.getInputProps("password")}label="Password" type="password" />
 
                     <Button type="submit" mt="lg" w={"100%"}>Submit</Button>
 
