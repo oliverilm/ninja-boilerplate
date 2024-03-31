@@ -1,7 +1,3 @@
-# ninja-boilerplate
+# Batteries included fullstack boilerplate
 
-## TODO
-* add readme
-* create frontend base
-* command documentation
-* workflows
+This is a boilerplate for your next big SaaS application. Just plug and play
