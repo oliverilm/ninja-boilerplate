@@ -1,6 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 
-const authInstance = axios.create({ baseURL: "http://0.0.0.0:8765/api/", headers: {
+const PORT = 8000
+const BASE = "http://0.0.0.0"
+
+const authInstance = axios.create({ baseURL: `${BASE}:${PORT}/api/`, headers: {
     "Content-Type": "application/json"
 } })
 
@@ -26,7 +29,7 @@ export interface Profile {
 }
 
 export function signUp(data: RegisterData): Promise<AxiosResponse<Profile>> {
-    return axios.post(`http://0.0.0.0:8765/api/users/`, data)
+    return authInstance.post(`users/`, data)
 }
 
 // -------------------------------------

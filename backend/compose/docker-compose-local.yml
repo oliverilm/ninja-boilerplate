@@ -25,7 +25,8 @@ services:
       - database
     links:
       - database:database
-  
+
+
 volumes:
   database:
 

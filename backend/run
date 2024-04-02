@@ -49,6 +49,10 @@ case $1 in
         # TODO
         exit
     ;;
+    docker:migrate)
+        sudo docker compose -f ./compose/docker-compose-local.yml run api python manage.py migrate --no-input
+        exit
+    ;;
 
     *)
         chmod +x ./scripts/$1
