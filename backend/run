@@ -15,36 +15,48 @@ case $1 in
 
         exit
     ;;
-    start)
+
+    # LOCAL ENV COMMANDS START HERE
+    local:start)
         source venv/bin/activate
         cd api
-        python3 manage.py runserver 0.0.0.0:8765
+        python3 manage.py runserver 0.0.0.0:8000
         exit
     ;;
-    start:docker)
-        # TODO
-        exit
-    ;;
-    start:docker:prod)
-        # TODO
-        exit
-    ;;
-    install)
+
+    local:install)
         source venv/bin/activate
         pip install -r requirements.txt
         exit
     ;;
-    test)
+    local:test)
         source venv/bin/activate
         cd api
         python3 manage.py test
         exit
     ;;
+
+    # DOCKER COMMANDS START HERE
+    docker:build)
+        sudo docker compose -f ./compose/docker-compose-local.yml build
+        exit
+    ;;
+    docker:start)
+        sudo docker compose -f ./compose/docker-compose-local.yml up
+        exit
+    ;;
+    docker:start:prod)
+        # TODO
+        exit
+    ;;
+
     *)
         chmod +x ./scripts/$1
         ./scripts/$1 $2
         exit
     ;;
+
+    
 esac
 
         

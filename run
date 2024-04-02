@@ -22,4 +22,9 @@ case $1 in
         ./frontend/run $2
         exit
     ;;
+
+    start)
+        sudo docker compose up
+        exit
+    ;;
 esac

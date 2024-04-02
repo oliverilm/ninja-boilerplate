@@ -8,10 +8,10 @@ services:
     expose:
       - 5173
     build:
-      context: ./frontend
+      context: ./
       dockerfile: Dockerfile
     volumes:
-      - .:/frontend
+      - .:/
     environment:
       - NODE_ENV=development  # Optional: Set to 'production' for optimized build
   
