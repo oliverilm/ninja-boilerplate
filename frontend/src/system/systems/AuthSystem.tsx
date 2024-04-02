@@ -1,13 +1,12 @@
-import { useLayoutEffect } from "react"
-import { useAuth } from "../../hooks/useAuth/useAuth"
+import { useLayoutEffect } from 'react';
+import { useAuth } from '../../hooks/useAuth/useAuth';
 
 export function AuthSystem() {
-    const {initialLoad} = useAuth()
-    
+  const { initialLoad } = useAuth();
 
-    useLayoutEffect(() => {
-        initialLoad()
-    }, [])
+  useLayoutEffect(() => {
+    initialLoad();
+  }, []);
 
-    return null
+  return null;
 }

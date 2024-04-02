@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import type { SetStateAction } from 'react';
 
 export type FormInputAllowedValueType = string | number | boolean;

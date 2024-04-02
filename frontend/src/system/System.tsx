@@ -1,10 +1,7 @@
-import { AuthSystem } from "./systems/AuthSystem";
+import { AuthSystem } from './systems/AuthSystem';
 
 export function System() {
-
-    return (
-        <>
-            <AuthSystem />
-        </>
-    )
+  return (
+    <AuthSystem />
+  );
 }

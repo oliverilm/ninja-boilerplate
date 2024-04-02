@@ -27,4 +27,5 @@ COPY . .
 EXPOSE 8000
 
 # Run manage.py when the container launches
+# TODO: replace this with gunicorn command
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

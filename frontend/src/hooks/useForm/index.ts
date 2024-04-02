@@ -26,8 +26,7 @@ function useForm<
   middleware?: D;
   allowValueTransform?: boolean;
 }): UseForm<T> {
-  const [formInputValues, setFormInputValues] =
-    useState<FormInputValues<T>>(initialValues);
+  const [formInputValues, setFormInputValues] = useState<FormInputValues<T>>(initialValues);
   const [formInputErrors, setFormInputErrors] = useState<
     Partial<FormInputErrors<T>>
   >({});
@@ -55,14 +54,17 @@ function useForm<
   function getAllInputErrors() {
     const newFormInputErrors: Partial<FormInputErrors<T>> = {};
 
+    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < Object.entries(formInputValues).length; i++) {
       const [inputName, inputValue] = Object.entries(formInputValues)[i];
       const validationResult = validate[inputName](inputValue, formInputValues);
 
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions -- test
       if (validationResult) {
-        newFormInputErrors[inputName as keyof T] =
-          getNormalizedValidationResult(inputName, validationResult);
+        newFormInputErrors[inputName as keyof T] = getNormalizedValidationResult(
+          inputName,
+          validationResult,
+        );
       }
     }
 
@@ -81,22 +83,20 @@ function useForm<
     return true;
   }
 
-  const onChange =
-    (formInputName: keyof T) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setFormInputValues((prev) => ({
-        ...prev,
-        [formInputName]:
+  const onChange = (formInputName: keyof T) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormInputValues((prev) => ({
+      ...prev,
+      [formInputName]:
           middleware?.[formInputName] !== undefined
             ? middleware?.[formInputName]?.(event, prev, setFormInputValues)
             : event.target.value,
-      }));
-      setFormInputErrors((prev) => ({
-        ...prev,
-        [formInputName]: undefined,
-      }));
-      setFormSubmissionErrors([]);
-    };
+    }));
+    setFormInputErrors((prev) => ({
+      ...prev,
+      [formInputName]: undefined,
+    }));
+    setFormSubmissionErrors([]);
+  };
 
   return {
     values: formInputValues,
@@ -151,18 +151,19 @@ function useForm<
     setFormInputErrors: (prev) => {
       const normalizedFormInputErrors: Partial<FormInputErrors<T>> = {};
 
+      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < Object.entries(prev).length; i++) {
         const [inputName, validationResult] = Object.entries(prev)[i];
-        normalizedFormInputErrors[inputName as keyof T] =
-          getNormalizedValidationResult(inputName, validationResult);
+        normalizedFormInputErrors[inputName as keyof T] = getNormalizedValidationResult(
+          inputName,
+          validationResult,
+        );
       }
 
       setFormInputErrors(normalizedFormInputErrors);
     },
-    setFormSubmissionError: (errorMessage: string) =>
-      setFormSubmissionErrors((prev) => [...prev, errorMessage]),
-    setFormSubmissionErrors: (errorMessages: string[]) =>
-      setFormSubmissionErrors((prev) => [...prev, ...errorMessages]),
+    setFormSubmissionError: (e: string) => setFormSubmissionErrors((prev) => [...prev, e]),
+    setFormSubmissionErrors: (e: string[]) => setFormSubmissionErrors((prev) => [...prev, ...e]),
     setFormData: (formData: Partial<FormInputValues<T>>) => {
       setFormInputValues((prev) => ({
         ...prev,

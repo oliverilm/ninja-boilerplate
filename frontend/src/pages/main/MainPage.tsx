@@ -1,11 +1,11 @@
-import { useUserStore } from "../../store";
+import { useUserStore } from '../../store';
 
 export function MainPage() {
-    const {user} = useUserStore()
+  const { user } = useUserStore();
 
-    return (
-        <div>
-            {JSON.stringify(user, null, 2)}
-        </div>
-    )
+  return (
+    <div>
+      {JSON.stringify(user, null, 2)}
+    </div>
+  );
 }

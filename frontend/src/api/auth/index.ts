@@ -41,6 +41,7 @@ export type AuthenticateData = {
 export interface TokensResponse {
     access: string,
     refresh: string,
+    username: string,
 }
 export function authenticate(data: AuthenticateData): Promise<AxiosResponse<TokensResponse>> {
     return authInstance.post(`token/pair`, data)
@@ -63,8 +64,6 @@ export function refreshToken(data: RefreshData): Promise<AxiosResponse<TokensRes
 }
 
 // -------------------------------------
-
-
 export function getProfile(): Promise<AxiosResponse<Profile>> {
     return authInstance.get("users/me", {headers: {
         "Authorization": "Bearer " + localStorage.getItem("access")

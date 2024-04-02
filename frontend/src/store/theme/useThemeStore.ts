@@ -1,17 +1,17 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
 interface ThemeStoreBase {
-    theme: "light" | "dark",
+    theme: 'light' | 'dark',
 }
 
 const initialState: ThemeStoreBase = {
-    theme: "light",
-}
+  theme: 'light',
+};
 
 export const useThemeStore = create<{
-    toggleTheme: () => void;
-} & ThemeStoreBase >((set) => ({
-    ...initialState,
-    
-    toggleTheme: () => set((state) => ({...state, theme: state.theme === "light" ? "dark" : "light"}))
-  }))
+    toggleTheme:() => void;
+      } & ThemeStoreBase >((set) => ({
+        ...initialState,
+
+        toggleTheme: () => set((state) => ({ ...state, theme: state.theme === 'light' ? 'dark' : 'light' })),
+      }));

@@ -14,7 +14,7 @@ services:
   api:
     build :
       context: ../
-      dockerfile: Dockerfile.prod
+      dockerfile: Dockerfile.local
     ports : 
       - "8000:8000"
     env_file:
