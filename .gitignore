@@ -1,4 +1,4 @@
 node_modules
 venv
-.env-temp
 backend/compose/data
+.env
