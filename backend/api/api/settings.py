@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-from django.conf import settings
 import os
+
+# TODO: add dj-rest-auth package
+# https://dj-rest-auth.readthedocs.io/en/latest/installation.html
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "some-random-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "true") == "true"
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'corsheaders',
     "application",
     "ninja_extra",
@@ -62,8 +65,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
 ]
+
 
 ROOT_URLCONF = 'api.urls'
 
@@ -82,6 +85,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'api.wsgi.application'
 
@@ -154,7 +158,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ONE_HOUR = 3600
 # JWT settings
-NINJA_JWT_SECRET = "your_secret_key"
+NINJA_JWT_SECRET = os.environ.get("NINJA_JWT_SECRET", "some key here")
 NINJA_JWT_ALGORITHM = "HS256"
 NINJA_JWT_ACCESS_TOKEN_LIFETIME = ONE_HOUR * 24  * 10  # 10 days
 NINJA_JWT_REFRESH_TOKEN_LIFETIME =  ONE_HOUR * 24 * 10 # 10 days

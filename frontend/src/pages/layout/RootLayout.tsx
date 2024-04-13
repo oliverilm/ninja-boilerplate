@@ -49,15 +49,17 @@ export function RootLayout() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p="md">
-        Navbar
-        {Array(15)
-          .fill(0)
-          .map((_, index) => (
+        <div style={{ flexGrow: 1 }}>
+          {Array(15)
+            .fill(0)
+            .map((_, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <Skeleton key={index} h={28} mt="sm" animate={false} />
-          ))}
+              <Skeleton key={index} h={28} mt="sm" animate={false} />
+            ))}
+        </div>
         <Button onClick={toggleTheme}>
           toggle
+          {' '}
           {theme === 'light' ? 'dark' : 'light'}
           {' '}
           theme

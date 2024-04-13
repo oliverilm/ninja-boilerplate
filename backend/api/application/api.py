@@ -20,7 +20,7 @@ from ninja.errors import ValidationError as NinjaValidationError
 from .utils.error import GenericError, UserAlreadyExistsError
 
 
-api = NinjaExtraAPI(docs=Swagger(), version="v1")
+api = NinjaExtraAPI(docs=Swagger(), version="randomsasd")
 api.register_controllers(NinjaJWTDefaultController)
 
 
@@ -85,7 +85,7 @@ def handle_field_error(request, exc: FieldError):
 def handle_unique_user_error(request, exc: UserAlreadyExistsError):
     return api.create_response(
         request,
-        data={"message": UserAlreadyExistsError.message, "detail": "AAA"},
+        data={"message": UserAlreadyExistsError.message, "detail": "AAA"}, # TODO: fix this
         status=HTTPStatus.BAD_REQUEST,
     )
 
@@ -93,7 +93,7 @@ def handle_unique_user_error(request, exc: UserAlreadyExistsError):
 def handle_generic_error(request, exc: AssertionError):
     return api.create_response(
         request,
-        data={"message": GenericError.message, "detail": "AAAAAAAAA"},
+        data={"message": GenericError.message, "detail": "AAAAAAAAA"}, # TODO: fix this
         status=HTTPStatus.BAD_REQUEST,
     )
 

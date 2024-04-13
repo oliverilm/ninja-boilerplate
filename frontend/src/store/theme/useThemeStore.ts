@@ -5,7 +5,7 @@ interface ThemeStoreBase {
 }
 
 const initialState: ThemeStoreBase = {
-  theme: 'light',
+  theme: localStorage.getItem('activeTheme') as ThemeStoreBase['theme'] ?? 'light',
 };
 
 export const useThemeStore = create<{
@@ -13,5 +13,9 @@ export const useThemeStore = create<{
       } & ThemeStoreBase >((set) => ({
         ...initialState,
 
-        toggleTheme: () => set((state) => ({ ...state, theme: state.theme === 'light' ? 'dark' : 'light' })),
+        toggleTheme: () => set((state) => {
+          const theme = state.theme === 'light' ? 'dark' : 'light';
+          localStorage.setItem('activeTheme', theme);
+          return { ...state, theme };
+        }),
       }));

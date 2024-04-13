@@ -1,10 +1,13 @@
 import { RouteProvider } from '../router/router';
+import { GoogleProvider } from './GoogleProvider';
 import { ThemeProvider } from './ThemeProvider';
 
 export function AppProvider() {
   return (
     <ThemeProvider>
-      <RouteProvider />
+      <GoogleProvider>
+        <RouteProvider />
+      </GoogleProvider>
     </ThemeProvider>
   );
 }

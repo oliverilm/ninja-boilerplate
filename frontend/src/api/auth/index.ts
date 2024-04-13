@@ -1,11 +1,14 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from 'axios';
 
-const PORT = 8000
-const BASE = "http://0.0.0.0"
+const PORT = 8000;
+const BASE = 'http://0.0.0.0';
 
-const authInstance = axios.create({ baseURL: `${BASE}:${PORT}/api/`, headers: {
-    "Content-Type": "application/json"
-} })
+const authInstance = axios.create({
+  baseURL: `${BASE}:${PORT}/api/`,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 // -------------------------------------
 export type RegisterData = {
@@ -29,7 +32,7 @@ export interface Profile {
 }
 
 export function signUp(data: RegisterData): Promise<AxiosResponse<Profile>> {
-    return authInstance.post(`users/`, data)
+  return authInstance.post('users/', data);
 }
 
 // -------------------------------------
@@ -44,7 +47,7 @@ export interface TokensResponse {
     username: string,
 }
 export function authenticate(data: AuthenticateData): Promise<AxiosResponse<TokensResponse>> {
-    return authInstance.post(`token/pair`, data)
+  return authInstance.post('token/pair', data);
 }
 
 // -------------------------------------
@@ -52,7 +55,7 @@ export type VerifyData = {
     token: string;
 }
 export function verifyToken(data: VerifyData) {
-    return authInstance.post(`token/verify`, data)
+  return authInstance.post('token/verify', data);
 }
 
 // -------------------------------------
@@ -60,15 +63,22 @@ export type RefreshData = {
     refresh: string;
 }
 export function refreshToken(data: RefreshData): Promise<AxiosResponse<TokensResponse>> {
-    return authInstance.post(`token/refresh`, data)
+  return authInstance.post('token/refresh', data);
 }
 
 // -------------------------------------
 export function getProfile(): Promise<AxiosResponse<Profile>> {
-    return authInstance.get("users/me", {headers: {
-        "Authorization": "Bearer " + localStorage.getItem("access")
-    }})
+  return authInstance.get('users/me', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access')}`,
+    },
+  });
 }
 
 // -------------------------------------
 
+// eslint-disable-next-line camelcase
+export function googleAuth(access_token: string): Promise<AxiosResponse<Omit<TokensResponse, 'username'>>> {
+  // eslint-disable-next-line camelcase
+  return authInstance.post('users/google', { access_token });
+}

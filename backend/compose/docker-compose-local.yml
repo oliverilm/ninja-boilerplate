@@ -1,11 +1,11 @@
 version: '3.8'
 services:
-  database:
+  db:
     image: postgres:14.1-alpine
-    container_name: database
+    container_name: db
     restart: always
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - ./data/db2:/var/lib/postgresql/data2
     env_file:
       - ../.env
     ports:
@@ -22,11 +22,11 @@ services:
     volumes: 
       - ../api/:/src
     depends_on:
-      - database
+      - db
     links:
-      - database:database
+      - db:db
 
 
 volumes:
-  database:
+  sb:
 

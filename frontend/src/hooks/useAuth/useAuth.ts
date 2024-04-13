@@ -1,5 +1,5 @@
 import {
-  AuthenticateData, RegisterData, authenticate, getProfile, refreshToken, signUp,
+  AuthenticateData, RegisterData, authenticate, getProfile, googleAuth, refreshToken, signUp,
 } from '../../api/auth';
 import { useUserStore } from '../../store';
 
@@ -24,6 +24,20 @@ export function useAuth() {
         } else {
           // refresh token is too old or incorrect
         }
+      }
+    },
+    googleAuth: async (accessToken: string) => {
+      const tokens = await googleAuth(accessToken);
+      localStorage.setItem('refresh', tokens.data.refresh);
+      localStorage.setItem('access', tokens.data.access);
+      if (tokens.data.access && tokens.data.refresh) {
+        const profile = await getProfile();
+        setData({
+          refresh: tokens.data.refresh,
+          access: tokens.data.access,
+          user: profile.data,
+          isAuthenticated: true,
+        });
       }
     },
     logIn: async (credentials: AuthenticateData) => {

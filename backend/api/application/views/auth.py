@@ -1,7 +1,8 @@
 from application.models.user import AppUser
-from application.schemas.user import UserIn, UserOut
+from application.schemas.user import UserIn, UserOut, AccessToken, TokenSchema
 from django.contrib.auth import get_user_model
 from ninja import Router
+from application.utils.google import get_google_profile, finalize_google_action
 from django.db.utils import IntegrityError
 from ninja_crud.views import (
     DeleteModelView,
@@ -10,9 +11,11 @@ from ninja_crud.views import (
     UpdateModelView,
 )
 from ninja_jwt.authentication import JWTAuth
+from application.models.user import UserGoogleProfle
 
 from application.utils.error import UserAlreadyExistsError, GenericError
 from ninja_crud.viewsets import ModelViewSet
+from asgiref.sync import sync_to_async
 
 no_auth_router = Router()
 
@@ -27,6 +30,28 @@ def register_user(request, user_in: UserIn):
         )
     except IntegrityError as error:
         raise UserAlreadyExistsError(error)
+
+
+@no_auth_router.post("/google", response=TokenSchema)
+def google_auth(request, access_token_in: AccessToken):
+    try:
+        google_profile = get_google_profile(access_token_in.access_token)
+        
+        if google_profile is None:
+            raise Exception("Unable to fetch the google profile.")
+        
+        google_object, status = UserGoogleProfle.objects.get_or_create(
+            user_id=google_profile["user_id"],
+            picture=google_profile["picture"],
+            name=google_profile["name"],
+            email=google_profile["email"]
+        )
+
+        user = finalize_google_action(google_object, status) 
+        return user
+    except Exception as e:
+        print(e)
+        return e
    
 
 auth_router = Router()

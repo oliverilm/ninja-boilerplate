@@ -4,6 +4,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks';
 import useForm from '../../hooks/useForm';
 import { useAuth } from '../../hooks/useAuth/useAuth';
+import { GoogleButton } from '../../components/GoogleButton/GoogleButton';
 
 interface LoginModalProps {
     opened: boolean,
@@ -43,7 +44,7 @@ export function LoginModal({ opened, onClose, noAccountCallback }: LoginModalPro
         <TextInput autoComplete="new-password" {...form.getInputProps('password')} label="Password" type="password" />
 
         <Button type="submit" mt="lg" w="100%">Submit</Button>
-
+        <GoogleButton />
         <Text
           mt="sm"
           onClick={noAccountCallback}

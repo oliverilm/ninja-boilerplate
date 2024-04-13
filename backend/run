@@ -12,10 +12,14 @@ case $1 in
         echo ""
         echo "  ./run db makemigrations       Generate database migrations"
         echo "  ./run db migrate              Apply database migrations"
-
         exit
     ;;
 
+    install)
+        source venv/bin/activate
+        pip install -r requirements.txt
+        exit
+        ;;
     # LOCAL ENV COMMANDS START HERE
     local:start)
         source venv/bin/activate
@@ -35,10 +39,22 @@ case $1 in
         python3 manage.py test
         exit
     ;;
+    makemigrations)
+        source venv/bin/activate
+        cd api
+        python3 manage.py makemigrations
+        exit
+    ;;
+    flush)
+        source venv/bin/activate
+        cd api
+        python3 manage.py flush
+        exit
+    ;;
 
     # DOCKER COMMANDS START HERE
     docker:build)
-        sudo docker compose -f ./compose/docker-compose-local.yml build
+        sudo docker compose -f ./compose/docker-compose-local.yml up --build
         exit
     ;;
     docker:start)
@@ -54,6 +70,25 @@ case $1 in
         exit
     ;;
 
+    docker:makemigrations)
+        sudo docker compose -f ./compose/docker-compose-local.yml run api python manage.py makemigrations
+        exit
+    ;;
+
+    docker:csu)
+        sudo docker compose -f ./compose/docker-compose-local.yml run api python manage.py createsuperuser
+        exit
+    ;;
+
+    docker:flush)
+        sudo docker compose -f ./compose/docker-compose-local.yml run api python manage.py flush
+        exit
+    ;;
+
+    docker:down)
+        sudo docker compose -f ./compose/docker-compose-local.yml down
+        exit
+    ;;
     *)
         chmod +x ./scripts/$1
         ./scripts/$1 $2
