@@ -15,7 +15,7 @@ def get_tokens_for_user(user):
     )
 
 
-def get_google_profile(access_token) -> GoogleProfile:
+def get_google_profile(access_token: str) -> GoogleProfile:
     try:
         # Verify and decode the access token
         id_info = id_token.verify_oauth2_token(access_token, requests.Request())
@@ -35,14 +35,14 @@ def get_google_profile(access_token) -> GoogleProfile:
 
 
 # TODO: need to optimize the whole flow, its just a bit too slow
-def finalize_google_action(
+async def finalize_google_action(
         google_profile: UserGoogleProfle,
         created: bool
 ) -> TokenSchema | None:
     user = None
     if created:
         names = google_profile.name.split(" ")
-        user = get_user_model().objects.create_user(
+        user = await get_user_model().objects.acreate(
                 username=google_profile.email,
                 email=google_profile.email,
                 google_profile=google_profile,
@@ -51,7 +51,7 @@ def finalize_google_action(
                 first_name=" ".join(names[0:-1])
         )
     else:
-        user = get_user_model().objects.get(email=google_profile.email)
+        user = await get_user_model().objects.aget(email=google_profile.email)
     
     if user is not None:
         return get_tokens_for_user(user)
