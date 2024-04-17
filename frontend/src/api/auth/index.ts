@@ -1,3 +1,4 @@
+import { notifications } from '@mantine/notifications';
 import axios, { AxiosResponse } from 'axios';
 
 const PORT = 8000;
@@ -10,6 +11,14 @@ const authInstance = axios.create({
   },
 });
 
+authInstance.interceptors.response.use((value) => value, (error) => {
+  if (error?.response?.data?.message && error?.response?.data?.detail) {
+    const errorData: { detail: string, message: string[]} = error?.response?.data;
+    errorData.message.forEach((message) => {
+      notifications.show({ title: errorData.detail, message, color: 'red' });
+    });
+  }
+});
 // -------------------------------------
 export type RegisterData = {
     email: string;
@@ -27,6 +36,7 @@ export interface Profile {
     is_staff: boolean
     is_active: boolean
     date_joined: string
+    google_profile: number;
     groups: number[]
     user_permissions: number[]
 }
@@ -81,4 +91,23 @@ export function getProfile(): Promise<AxiosResponse<Profile>> {
 export function googleAuth(access_token: string): Promise<AxiosResponse<Omit<TokensResponse, 'username'>>> {
   // eslint-disable-next-line camelcase
   return authInstance.post('users/google', { access_token });
+}
+// eslint-disable-next-line camelcase
+export function linkGoogleToAccount(access_token: string): Promise<AxiosResponse<unknown>> {
+// eslint-disable-next-line camelcase
+  return authInstance.post('users/google-link', { access_token }, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access')}`,
+    },
+  });
+}
+
+// eslint-disable-next-line camelcase
+export function unlinkGoogleToAccount(): Promise<AxiosResponse<unknown>> {
+  // eslint-disable-next-line camelcase
+  return authInstance.post('users/google-unlink', {}, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access')}`,
+    },
+  });
 }

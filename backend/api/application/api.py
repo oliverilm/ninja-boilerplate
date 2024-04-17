@@ -1,13 +1,12 @@
 from ninja import Swagger
 # from api.views import item_router, user_auth_router, user_no_auth_router
-from application.views import auth_router, no_auth_router
+from application.views import no_auth_router, google_router
 from ninja.errors import ValidationError as NinjaValidationError
 from ninja_extra import NinjaExtraAPI
-from ninja_jwt.authentication import JWTAuth
 from ninja_jwt.controller import NinjaJWTDefaultController
 
 from http import HTTPStatus
-from application.utils.error import ApiError
+from application.utils.error import ApiError, CustomApiException
 
 # from api.views import item_router, user_auth_router, user_no_auth_router
 from django.core.exceptions import (
@@ -23,8 +22,8 @@ from .utils.error import GenericError, UserAlreadyExistsError
 api = NinjaExtraAPI(docs=Swagger(), version="randomsasd")
 api.register_controllers(NinjaJWTDefaultController)
 
-
 api.add_router("users", no_auth_router, tags=["users"])
+api.add_router("users", google_router, tags=["users"])
 
 
 # TODO: move those handlers out of here
@@ -96,5 +95,14 @@ def handle_generic_error(request, exc: AssertionError):
         data={"message": GenericError.message, "detail": "AAAAAAAAA"}, # TODO: fix this
         status=HTTPStatus.BAD_REQUEST,
     )
+
+@api.exception_handler(CustomApiException)
+def handle_generic_error(request, exc: CustomApiException):
+    return api.create_response(
+        request,
+        data={"message": exc.args, "detail": "AAAAAAAAA"}, # TODO: fix this
+        status=HTTPStatus.BAD_REQUEST,
+    )
+
 
 

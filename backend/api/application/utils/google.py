@@ -4,7 +4,7 @@ from application.schemas.user import GoogleProfile, TokenSchema, AccessTokensObj
 from application.models.user import UserGoogleProfle
 from django.contrib.auth import get_user_model
 from ninja_jwt.tokens import RefreshToken
-
+from time import sleep
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -16,33 +16,34 @@ def get_tokens_for_user(user):
 
 
 def get_google_profile(access_token: str) -> GoogleProfile:
-    try:
-        # Verify and decode the access token
-        id_info = id_token.verify_oauth2_token(access_token, requests.Request())
+    # Verify and decode the access token
+    id_info = id_token.verify_oauth2_token(
+        access_token, 
+        requests.Request(), 
+        None, 
+        3
+    )
 
-        # Extract user profile information
-        profile = {
-            'user_id': id_info['sub'],
-            'name': id_info.get('name', ''),
-            'email': id_info.get('email', ''),
-            'picture': id_info.get('picture', ''),
-        }
+    # Extract user profile information
+    profile = {
+        'user_id': id_info['sub'],
+        'name': id_info.get('name', ''),
+        'email': id_info.get('email', ''),
+        'picture': id_info.get('picture', ''),
+    }
 
-        return profile
-    except Exception as e:
-        print("Error retrieving Google profile:", e)
-        return None
+    return profile
 
 
 # TODO: need to optimize the whole flow, its just a bit too slow
-async def finalize_google_action(
+def finalize_google_action(
         google_profile: UserGoogleProfle,
         created: bool
 ) -> TokenSchema | None:
     user = None
     if created:
         names = google_profile.name.split(" ")
-        user = await get_user_model().objects.acreate(
+        user = get_user_model().objects.create(
                 username=google_profile.email,
                 email=google_profile.email,
                 google_profile=google_profile,
@@ -51,8 +52,17 @@ async def finalize_google_action(
                 first_name=" ".join(names[0:-1])
         )
     else:
-        user = await get_user_model().objects.aget(email=google_profile.email)
+        user = get_user_model().objects.get(email=google_profile.email)
     
     if user is not None:
         return get_tokens_for_user(user)
     return None
+
+
+def get_or_create_google_profile_object(google_object: GoogleProfile) -> tuple[UserGoogleProfle, bool]:
+    return UserGoogleProfle.objects.get_or_create(
+            user_id=google_object["user_id"],
+            picture=google_object["picture"],
+            name=google_object["name"],
+            email=google_object["email"]
+        )

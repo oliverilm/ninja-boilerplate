@@ -1,3 +1,4 @@
+import { GoogleButton } from '../../components/GoogleButton/GoogleButton';
 import { useUserStore } from '../../store';
 
 export function MainPage() {
@@ -6,6 +7,9 @@ export function MainPage() {
   return (
     <div>
       {JSON.stringify(user, null, 2)}
+
+      <GoogleButton.Link />
+      <GoogleButton.Unlink />
     </div>
   );
 }
