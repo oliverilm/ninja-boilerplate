@@ -1,6 +1,6 @@
 from application.schemas.user import AccessToken, TokenSchema
 from ninja import Router
-from application.utils.google import get_google_profile, finalize_google_action, get_or_create_google_profile_object
+from application.utils.google import get_google_profile, finalize_google_action, get_or_create_google_profile_object, get_tokens_for_user
 from ninja_jwt.authentication import JWTAuth
 from application.models.user import  AppUser
 from application.utils.message import UtilMessage, UtilMessageSchema
@@ -21,20 +21,19 @@ def google_auth(request, access_token_in: AccessToken):
         
         # 1. check if google_profile with this google_profile.user_id exists
 
-        user = get_user_model().objects.get(google_profile__user_id=google_profile["user_id"])
-        
-        # if exists, then select that user
-
-        if user is not None: # TODO: do this later
-            pass
-        else: 
-            pass
-
-        # else create a new user
-        
-        return finalize_google_action(
-            *get_or_create_google_profile_object(google_profile)
-        ) 
+        try:
+            user = get_user_model().objects.only(
+                "google_profile", 
+                "google_profile__user_id"
+            ).select_related(
+                "google_profile"
+            ).get(google_profile__user_id=google_profile["user_id"])
+            if user is not None: # TODO: do this later
+                return get_tokens_for_user(user)
+        except Exception as e:
+            return finalize_google_action(
+                *get_or_create_google_profile_object(google_profile)
+            ) 
     except Exception as e:
         raise CustomApiException(e.args)
 

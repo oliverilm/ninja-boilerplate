@@ -33,7 +33,7 @@ export function UnlinkGoogleButton() {
   const { user } = useUserStore();
   const { refetchProfile } = useAuth();
 
-  if (user?.google_profile === null) return null;
+  if (user?.google_profile === null || !user) return null;
 
   const onClick = async () => {
     await unlinkGoogleToAccount();
@@ -49,13 +49,14 @@ export function LinkGoogleButton() {
   const { user } = useUserStore();
   const { refetchProfile } = useAuth();
 
+  if (user?.google_profile !== null || !user) return null;
+
   const onSuccess = async (credentials: CredentialResponse) => {
     if (credentials && credentials.credential) {
       await linkGoogleToAccount(credentials.credential);
       refetchProfile();
     }
   };
-  if (user?.google_profile !== null) return null;
 
   return (
     <GoogleLogin

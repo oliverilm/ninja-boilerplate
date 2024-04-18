@@ -54,7 +54,7 @@ def finalize_google_action(
                 first_name=" ".join(names[0:-1])
         )
     else:
-        user = get_user_model().objects.get(email=google_profile.email)
+        user = get_user_model().objects.only("id").get(email=google_profile.email)
     
     if user is not None:
         return get_tokens_for_user(user)

@@ -1,6 +1,7 @@
 from application.models.user import AppUser
 from application.schemas.user import UserIn, UserOut
 from django.contrib.auth import get_user_model
+from application.utils.error import CustomApiException
 from ninja import Router
 from django.db.utils import IntegrityError
 from ninja_crud.views import (
@@ -34,13 +35,11 @@ auth_router = Router()
 class UserViewSet(ModelViewSet):
     model = AppUser
 
-
     # AbstractModelView subclasses can be used as-is
     list = ListModelView(output_schema=UserOut)
     retrieve = RetrieveModelView(output_schema=UserOut)
     update = UpdateModelView(input_schema=UserIn, output_schema=UserOut)
     delete = DeleteModelView()
-
 
 
 # The register_routes method must be called to register the routes with the router
@@ -57,4 +56,4 @@ def get_current_user(request):
     if user.is_authenticated:
         return user
     else:
-        return {"detail": "Authentication credentials were not provided."}
+        raise CustomApiException("Authentication credentials were not provided.")
