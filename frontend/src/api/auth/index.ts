@@ -11,7 +11,14 @@ const authInstance = axios.create({
   },
 });
 
-authInstance.interceptors.response.use((value) => value, (error) => {
+authInstance.interceptors.response.use((value) => {
+  if (value.data.message && value.data.status) {
+    const { data: { message, status } } = value;
+    notifications.show({ title: status, message, color: 'green' });
+  }
+
+  return value;
+}, (error) => {
   if (error?.response?.data?.message && error?.response?.data?.detail) {
     const errorData: { detail: string, message: string[]} = error?.response?.data;
     errorData.message.forEach((message) => {

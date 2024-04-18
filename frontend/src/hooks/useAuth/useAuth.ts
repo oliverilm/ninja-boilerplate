@@ -73,5 +73,11 @@ export function useAuth() {
       }
       setData({});
     },
+    refetchProfile: async () => {
+      const profile = await getProfile();
+      if (profile) {
+        setData({ user: profile.data });
+      }
+    },
   };
 }

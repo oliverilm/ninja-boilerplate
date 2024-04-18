@@ -4,7 +4,10 @@ from application.schemas.user import GoogleProfile, TokenSchema, AccessTokensObj
 from application.models.user import UserGoogleProfle
 from django.contrib.auth import get_user_model
 from ninja_jwt.tokens import RefreshToken
-from time import sleep
+from hashlib import sha256
+
+def generate_password(str:str) -> str:
+    return sha256(bytes(str, encoding="raw_unicode_escape"), usedforsecurity=True).hexdigest()
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -13,7 +16,6 @@ def get_tokens_for_user(user):
         refresh=str(refresh), 
         access=str(refresh.access_token)
     )
-
 
 def get_google_profile(access_token: str) -> GoogleProfile:
     # Verify and decode the access token
@@ -43,11 +45,11 @@ def finalize_google_action(
     user = None
     if created:
         names = google_profile.name.split(" ")
-        user = get_user_model().objects.create(
+        user = get_user_model().objects.create_user(
                 username=google_profile.email,
                 email=google_profile.email,
                 google_profile=google_profile,
-                password=None,
+                password=generate_password(google_profile.user_id),
                 last_name=names[-1],
                 first_name=" ".join(names[0:-1])
         )

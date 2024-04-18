@@ -44,7 +44,7 @@ export function LoginModal({ opened, onClose, noAccountCallback }: LoginModalPro
         <TextInput autoComplete="new-password" {...form.getInputProps('password')} label="Password" type="password" />
 
         <Button type="submit" mt="lg" w="100%">Submit</Button>
-        <GoogleButton />
+        <GoogleButton callback={onClose} />
         <Text
           mt="sm"
           onClick={noAccountCallback}

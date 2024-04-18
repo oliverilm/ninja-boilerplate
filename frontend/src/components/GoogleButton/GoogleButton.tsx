@@ -6,11 +6,16 @@ import { useAuth } from '../../hooks/useAuth/useAuth';
 import { useUserStore } from '../../store';
 import { linkGoogleToAccount, unlinkGoogleToAccount } from '../../api/auth';
 
-export function GoogleButton() {
+interface Props {
+  callback: () => void;
+}
+
+export function GoogleButton({ callback }: Props) {
   const { googleAuth } = useAuth();
   const onSuccess = async (credentials: CredentialResponse) => {
     if (credentials && credentials.credential) {
       await googleAuth(credentials.credential);
+      callback?.();
     }
   };
   return (
@@ -26,11 +31,13 @@ export function GoogleButton() {
 
 export function UnlinkGoogleButton() {
   const { user } = useUserStore();
+  const { refetchProfile } = useAuth();
 
   if (user?.google_profile === null) return null;
 
   const onClick = async () => {
     await unlinkGoogleToAccount();
+    refetchProfile();
   };
 
   return (
@@ -40,10 +47,12 @@ export function UnlinkGoogleButton() {
 
 export function LinkGoogleButton() {
   const { user } = useUserStore();
+  const { refetchProfile } = useAuth();
 
   const onSuccess = async (credentials: CredentialResponse) => {
     if (credentials && credentials.credential) {
       await linkGoogleToAccount(credentials.credential);
+      refetchProfile();
     }
   };
   if (user?.google_profile !== null) return null;

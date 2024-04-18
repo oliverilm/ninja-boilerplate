@@ -1,25 +1,7 @@
-from typing import Any
-from django.core.exceptions import (
-    FieldError,
-    ObjectDoesNotExist,
-    PermissionDenied,
-    ValidationError,
-)
-
 from ninja_extra import status
 
 from ninja_extra.exceptions import (
     APIException,
-    ValidationError,
-    ParseError,
-    AuthenticationFailed,
-    NotAuthenticated,
-    PermissionDenied,
-    NotFound,
-    MethodNotAllowed,
-    NotAcceptable,
-    UnsupportedMediaType,
-    Throttled,
 )
 
 """

@@ -5,11 +5,12 @@ from ninja_jwt.authentication import JWTAuth
 from application.models.user import  AppUser
 from application.utils.message import UtilMessage, UtilMessageSchema
 from application.utils.error import CustomApiException
+from django.contrib.auth import get_user_model
 
 google_router = Router()
 
 # register a new user with google.
-# TODO: investigate the password situation
+# TODO: this does not work properly. it gets the incorrect user
 @google_router.post("/google", response=TokenSchema)
 def google_auth(request, access_token_in: AccessToken):
     try:
@@ -18,7 +19,19 @@ def google_auth(request, access_token_in: AccessToken):
         if google_profile is None:
             raise CustomApiException("Unable to fetch the google profile.")
         
+        # 1. check if google_profile with this google_profile.user_id exists
 
+        user = get_user_model().objects.get(google_profile__user_id=google_profile["user_id"])
+        
+        # if exists, then select that user
+
+        if user is not None: # TODO: do this later
+            pass
+        else: 
+            pass
+
+        # else create a new user
+        
         return finalize_google_action(
             *get_or_create_google_profile_object(google_profile)
         ) 
@@ -30,16 +43,18 @@ def google_auth(request, access_token_in: AccessToken):
 # so the user can log in with their google account instead of password and email
 @google_router.post("/google-link", response=UtilMessageSchema, auth=JWTAuth())
 def google_link(request, access_token_in: AccessToken):
-    google_profile = get_google_profile(access_token_in.access_token)
     user: AppUser = request.user 
-
-    if google_profile is None:
-        raise CustomApiException("Google profile not available.")
 
     if user.google_profile is not None:
         raise CustomApiException("Google provider already linked.")
     
-    created_google_profile, created = get_or_create_google_profile_object(google_profile)
+    fetched_google_profile = get_google_profile(access_token_in.access_token)
+
+    if fetched_google_profile is None:
+        raise CustomApiException("Google profile not available.")
+    
+    # TODO: need to check first, if a google_profile with this data exists.
+    created_google_profile, created = get_or_create_google_profile_object(fetched_google_profile)
 
     if not created:
         raise CustomApiException("Google profile already exists")
@@ -51,7 +66,7 @@ def google_link(request, access_token_in: AccessToken):
     
 
 # delete user google link
-@google_router.post("/google-unlink", response=TokenSchema, auth=JWTAuth())
+@google_router.post("/google-unlink", response=UtilMessageSchema, auth=JWTAuth())
 def google_unlink(request):
     user: AppUser = request.user
 
