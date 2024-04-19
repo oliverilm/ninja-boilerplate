@@ -1,5 +1,6 @@
 import {
   Button, Modal, TextInput, Text,
+  Flex,
 } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import useForm from '../../hooks/useForm';
@@ -44,7 +45,7 @@ export function LoginModal({ opened, onClose, noAccountCallback }: LoginModalPro
         <TextInput autoComplete="new-password" {...form.getInputProps('password')} label="Password" type="password" />
 
         <Button type="submit" mt="lg" w="100%">Submit</Button>
-        <GoogleButton callback={onClose} />
+
         <Text
           mt="sm"
           onClick={noAccountCallback}
@@ -56,6 +57,10 @@ export function LoginModal({ opened, onClose, noAccountCallback }: LoginModalPro
           Dont have an account? Sign up
         </Text>
       </form>
+
+      <Flex justify="center">
+        <GoogleButton callback={onClose} />
+      </Flex>
     </Modal>
   );
 }

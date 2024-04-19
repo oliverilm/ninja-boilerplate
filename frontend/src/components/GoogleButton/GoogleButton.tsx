@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {
   CredentialResponse, GoogleLogin,
 } from '@react-oauth/google';
@@ -12,18 +13,21 @@ interface Props {
 
 export function GoogleButton({ callback }: Props) {
   const { googleAuth } = useAuth();
+
   const onSuccess = async (credentials: CredentialResponse) => {
     if (credentials && credentials.credential) {
       await googleAuth(credentials.credential);
       callback?.();
     }
   };
+
   return (
     <GoogleLogin
+      auto_select={false}
+      size="large"
       onSuccess={onSuccess}
       onError={() => {
-        // TODO: add toasts
-        console.log('Login Failed');
+        console.error('Login Failed');
       }}
     />
   );

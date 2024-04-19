@@ -4,6 +4,7 @@ import {
 import { useMediaQuery } from '@mantine/hooks';
 import useForm from '../../hooks/useForm';
 import { useAuth } from '../../hooks/useAuth/useAuth';
+import { GoogleButton } from '../../components/GoogleButton/GoogleButton';
 
 interface LoginModalProps {
     opened: boolean,
@@ -63,6 +64,8 @@ export function SignupModal({ opened, onClose, haveAccountCallback }: LoginModal
           Already have an account? Log in
         </Text>
       </form>
+
+      <GoogleButton callback={onClose} />
     </Modal>
   );
 }
