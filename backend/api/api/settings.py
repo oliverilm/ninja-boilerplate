@@ -49,11 +49,12 @@ INSTALLED_APPS = [
 
     'corsheaders',
     "application",
+    "api_auth",
     "ninja_extra",
     
 ]
 
-AUTH_USER_MODEL = "application.AppUser"
+AUTH_USER_MODEL = "api_auth.AppUser"
 
 
 MIDDLEWARE = [

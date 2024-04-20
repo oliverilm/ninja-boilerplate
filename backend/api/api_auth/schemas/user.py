@@ -1,6 +1,6 @@
 from ninja import Schema
 from ninja import ModelSchema
-from application.models.user import AppUser
+from api_auth.models.user import AppUser
 
 class UserOut(ModelSchema):
     class Meta:

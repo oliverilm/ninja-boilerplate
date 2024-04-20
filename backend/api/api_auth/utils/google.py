@@ -1,7 +1,7 @@
 from google.auth.transport import requests
 from google.oauth2 import id_token
-from application.schemas.user import GoogleProfile, TokenSchema, AccessTokensObject
-from application.models.user import UserGoogleProfle
+from api_auth.schemas.user import GoogleProfile, TokenSchema, AccessTokensObject
+from api_auth.models.user import UserGoogleProfle
 from django.contrib.auth import get_user_model
 from ninja_jwt.tokens import RefreshToken
 from hashlib import sha256

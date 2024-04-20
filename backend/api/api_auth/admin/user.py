@@ -1,5 +1,5 @@
 from django.contrib import admin
-from application.models import AppUser,UserGoogleProfle
+from api_auth.models import AppUser, UserGoogleProfle
 # Register your models here.
 
 DEFAULT_LIST_PER_PAGE = 20

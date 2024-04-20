@@ -20,9 +20,6 @@ Throttled
 
 """
 
-from ninja.errors import ValidationError as NinjaValidationError
-
-
 class ApiError:
     ObjectDoesNotExiste="ObjectDoesNotExist"
     PermissionDenied="PermissionDenied"
@@ -40,6 +37,7 @@ class GenericError(APIException):
     message = "GenericError"
     detail = "Something went wrong"
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+
 
 class CustomApiException(Exception):
     pass
