@@ -1,31 +1,6 @@
-import { notifications } from '@mantine/notifications';
-import axios, { AxiosResponse } from 'axios';
+import type { AxiosResponse } from 'axios';
+import { api } from '../instances';
 
-const PORT = 8000;
-const BASE = 'http://0.0.0.0';
-
-const authInstance = axios.create({
-  baseURL: `${BASE}:${PORT}/api/`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-authInstance.interceptors.response.use((value) => {
-  if (value.data.message && value.data.status) {
-    const { data: { message, status } } = value;
-    notifications.show({ title: status, message, color: 'green' });
-  }
-
-  return value;
-}, (error) => {
-  if (error?.response?.data?.message && error?.response?.data?.detail) {
-    const errorData: { detail: string, message: string[]} = error?.response?.data;
-    errorData.message.forEach((message) => {
-      notifications.show({ title: errorData.detail, message, color: 'red' });
-    });
-  }
-});
 // -------------------------------------
 export type RegisterData = {
     email: string;
@@ -49,7 +24,7 @@ export interface Profile {
 }
 
 export function signUp(data: RegisterData): Promise<AxiosResponse<Profile>> {
-  return authInstance.post('users/', data);
+  return api.post('auth/', data);
 }
 
 // -------------------------------------
@@ -64,7 +39,7 @@ export interface TokensResponse {
     username: string,
 }
 export function authenticate(data: AuthenticateData): Promise<AxiosResponse<TokensResponse>> {
-  return authInstance.post('token/pair', data);
+  return api.post('token/pair', data);
 }
 
 // -------------------------------------
@@ -72,7 +47,7 @@ export type VerifyData = {
     token: string;
 }
 export function verifyToken(data: VerifyData) {
-  return authInstance.post('token/verify', data);
+  return api.post('token/verify', data);
 }
 
 // -------------------------------------
@@ -80,12 +55,12 @@ export type RefreshData = {
     refresh: string;
 }
 export function refreshToken(data: RefreshData): Promise<AxiosResponse<TokensResponse>> {
-  return authInstance.post('token/refresh', data);
+  return api.post('token/refresh', data);
 }
 
 // -------------------------------------
 export function getProfile(): Promise<AxiosResponse<Profile>> {
-  return authInstance.get('users/me', {
+  return api.get('auth/me', {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('access')}`,
     },
@@ -97,22 +72,18 @@ export function getProfile(): Promise<AxiosResponse<Profile>> {
 // eslint-disable-next-line camelcase
 export function googleAuth(access_token: string): Promise<AxiosResponse<Omit<TokensResponse, 'username'>>> {
   // eslint-disable-next-line camelcase
-  return authInstance.post('users/google', { access_token });
+  return api.post('auth/google', { access_token });
 }
 // eslint-disable-next-line camelcase
 export function linkGoogleToAccount(access_token: string): Promise<AxiosResponse<unknown>> {
 // eslint-disable-next-line camelcase
-  return authInstance.post('users/google-link', { access_token }, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem('access')}`,
-    },
-  });
+  return api.post('auth/google-link', { access_token });
 }
 
 // eslint-disable-next-line camelcase
 export function unlinkGoogleToAccount(): Promise<AxiosResponse<unknown>> {
   // eslint-disable-next-line camelcase
-  return authInstance.post('users/google-unlink', {}, {
+  return api.post('google-unlink', {}, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem('access')}`,
     },
