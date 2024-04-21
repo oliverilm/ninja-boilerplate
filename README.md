@@ -7,10 +7,10 @@ This is a boilerplate for your next big SaaS application. Just plug and play
 The backend utilizes the django ninja framework, to get the power of django ORM and admin panel, with the speed and simplicity of ninja
 
 This basic boilerplate has build it: 
-* regular authentication & registration
-* google authentication & registration
-* google account linking and unlinking
-* starter for your custom business logic
+* :e-mail: regular authentication & registration
+* :rocket: google authentication & registration
+* :link: google account linking and unlinking
+* :man_in_business_suit_levitating: starter for your custom business logic
 
 The whole authentication is built with JWT tokens
 
