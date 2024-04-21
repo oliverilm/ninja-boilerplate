@@ -10,7 +10,7 @@ This basic boilerplate has build it:
 * :e-mail: regular authentication & registration
 * :rocket: google authentication & registration
 * :link: google account linking and unlinking
-* :man_in_business_suit_levitating: starter for your custom business logic
+* :large_orange_circle: starter for your custom business logic
 
 The whole authentication is built with JWT tokens
 
